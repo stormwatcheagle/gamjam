@@ -9,3 +9,10 @@ you take over a center by fighting off the other people there
 parlay mode, cant get shot, ask for or break alliance
 
 make or break alliances whenever you want
+
+civilian walk around randomly
+
+if they randomly walk into your capital, then they join you
+
+you have to be careful about randomly shooting them
+
