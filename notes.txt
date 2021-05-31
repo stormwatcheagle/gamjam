@@ -1,0 +1,8 @@
+political top down shooter
+walk around, gather followers, talk to other groups, build base, 
+
+civilians walk around randomly
+
+if they walk into one of your centers, they join you. 
+
+you take over a center by fighting off the other people there
