@@ -15,6 +15,7 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
  
 bulletList = []                                     #list of bullets
+
  
 def draw_stick_figure(screen, x, y):
     # Head
@@ -54,9 +55,20 @@ class bullet:                       #bullet class
         
     def drawBullet(self):
          pygame.draw.ellipse(screen, BLACK, [self.x,self.y, 10, 10], 0)
+
+
+    
     
 def fireUp(x,y):                       #firing upwards function (could just have a general firing function too)
     bulletList.append(bullet(x,y,0))
+def fireRight(x,y):                       #firing upwards function (could just have a general firing function too)
+    bulletList.append(bullet(x,y,1))
+def fireDown(x,y):                       #firing upwards function (could just have a general firing function too)
+    bulletList.append(bullet(x,y,2))
+def fireLeft(x,y):                       #firing upwards function (could just have a general firing function too)
+    bulletList.append(bullet(x,y,3))
+
+
 
 size = [2000, 1000]    
 screen = pygame.display.set_mode(size)   
@@ -107,6 +119,13 @@ if __name__ == "__main__":
                     y_speed = 3
                 elif event.key == pygame.K_w:
                     fireUp(x_coord,y_coord)
+                elif event.key == pygame.K_d:
+                    fireRight(x_coord,y_coord)
+                elif event.key == pygame.K_a:
+                    fireLeft(x_coord,y_coord)
+                elif event.key == pygame.K_s:
+                    fireDown(x_coord,y_coord)                    
+                    
             # User let up on a key
             elif event.type == pygame.KEYUP:
                 # If it is an arrow key, reset vector back to zero
