@@ -15,9 +15,6 @@ GREEN = (0, 255, 0)
 RED = (255, 0, 0)
  
 bulletList = []                                     #list of bullets
-def updateBullets():
-    
-def drawBullets():
  
 def draw_stick_figure(screen, x, y):
     # Head
@@ -35,26 +32,40 @@ def draw_stick_figure(screen, x, y):
     pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
  
 class bullet:                       #bullet class
-    self.direction
-    self.x
-    self.y
+    direction = 0
+    x = 0
+    y = 0
+    bSpeed = 3             #default bullet speed is 3
     
     def __init__(self, xPos,yPos,direction):
         self.x = xPos    # instance variable unique to each instance    
         self.y = yPos    # instance variable unique to each instance
         self.direction = direction
     
+    def updateBullet(self):
+        if self.direction == 0:
+            self.y = self.y - self.bSpeed
+        if self.direction == 1:
+            self.x = self.x + self.bSpeed
+        if self.direction == 2:
+            self.y = self.y + self.bSpeed
+        if self.direction == 3:
+            self.x = self.x - self.bSpeed
+        
+    def drawBullet(self):
+         pygame.draw.ellipse(screen, BLACK, [self.x,self.y, 10, 10], 0)
     
 def fireUp(x,y):                       #firing upwards function (could just have a general firing function too)
     bulletList.append(bullet(x,y,0))
-    
+
+size = [2000, 1000]    
+screen = pygame.display.set_mode(size)   
 if __name__ == "__main__":    
     # Setup
     pygame.init()
      
     # Set the width and height of the screen [width,height]
-    size = [2000, 1000]
-    screen = pygame.display.set_mode(size)
+
      
     pygame.display.set_caption("My Game")
      
@@ -96,7 +107,6 @@ if __name__ == "__main__":
                     y_speed = 3
                 elif event.key == pygame.K_w:
                     fireUp(x_coord,y_coord)
-                    
             # User let up on a key
             elif event.type == pygame.KEYUP:
                 # If it is an arrow key, reset vector back to zero
@@ -118,7 +128,10 @@ if __name__ == "__main__":
         screen.fill(WHITE)
      
         draw_stick_figure(screen, x_coord, y_coord)
-     
+        for i in range(len(bulletList)):
+            bulletList[i].updateBullet()
+            bulletList[i].drawBullet()
+            
      
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
