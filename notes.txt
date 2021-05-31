@@ -6,3 +6,6 @@ civilians walk around randomly
 if they walk into one of your centers, they join you. 
 
 you take over a center by fighting off the other people there
+parlay mode, cant get shot, ask for or break alliance
+
+make or break alliances whenever you want
