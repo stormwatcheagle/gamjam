@@ -16,3 +16,6 @@ if they randomly walk into your capital, then they join you
 
 you have to be careful about randomly shooting them
 
+
+the genetic algorithm will have at least 3 traits:
+likeliness of going for offense, likelihood of going for defense, and likeliness of switching (how often it decides to make the decision) 
