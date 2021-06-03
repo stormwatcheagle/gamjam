@@ -1,6 +1,18 @@
 # -*- coding: utf-8 -*-
 """
 Created on Mon May 31 13:58:19 2021
+TODO:
+    fill out npc class
+    give team traits (offense,defense,flakyness)
+
+    make bullets kill
+    npc spawn
+    
+    player respawn
+
+    create bases
+    spawn npcs at bases
+    allow bases to change teams
 
 @author: iviti
 """
@@ -13,8 +25,14 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
- 
+BLUE = (0,0,255) 
+YELLOW = (128,128,0)
+
 bulletList = []                                     #list of bullets
+npcList = []                                        #list of npcs
+ 
+screenSize = [1000, 700]
+screen = pygame.display.set_mode(screenSize)
 
  
 def draw_stick_figure(screen, x, y):
@@ -31,18 +49,36 @@ def draw_stick_figure(screen, x, y):
     # Arms
     pygame.draw.line(screen, RED, [5 + x, 7 + y], [9 + x, 17 + y], 2)
     pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
- 
+
+def drawNpc(screen,x,y,color):
+    # Head
+    pygame.draw.ellipse(screen, color, [1 + x, y, 10, 10], 0)
+
+    # Legs
+    pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [10 + x, 27 + y], 2)
+    pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [x, 27 + y], 2)
+
+    # Body
+    pygame.draw.line(screen, RED, [5 + x, 17 + y], [5 + x, 7 + y], 2)
+
+    # Arms
+    pygame.draw.line(screen, RED, [5 + x, 7 + y], [9 + x, 17 + y], 2)
+    pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
+
+
 class bullet:                       #bullet class
     direction = 0
     x = 0
     y = 0
-    bSpeed = 3             #default bullet speed is 3
-    
-    def __init__(self, xPos,yPos,direction):
-        self.x = xPos    # instance variable unique to each instance    
+    bSpeed = 6             #default bullet speed is 3
+    team = 0
+
+    def __init__(self, xPos,yPos,direction,team):
+        self.x = xPos    # instance variable unique to each instance
         self.y = yPos    # instance variable unique to each instance
         self.direction = direction
-    
+        self.team = team
+
     def updateBullet(self):
         if self.direction == 0:
             self.y = self.y - self.bSpeed
@@ -52,13 +88,69 @@ class bullet:                       #bullet class
             self.y = self.y + self.bSpeed
         if self.direction == 3:
             self.x = self.x - self.bSpeed
-        
+
     def drawBullet(self):
-         pygame.draw.ellipse(screen, BLACK, [self.x,self.y, 10, 10], 0)
+         pygame.draw.ellipse(screen, BLUE, [self.x,self.y, 5, 5], 0)
+
+    def checkInBounds(self):
+        inBounds = 1
+        if self.x > screenSize[0]:
+            inBounds = 0
+        if self.y > screenSize[1]:
+            inBounds = 0
+        if self.x < 0:
+            inBounds = 0
+        if self.y < 0 :
+            inBounds = 0
+        return inBounds
 
 
+class npc:
+    x = 0
+    y = 0
+    team = 0
+    qstateMatrix = []
+    color = YELLOW                          #just one color for now until we generalize teams
+    speed = 2
+    direction = 0
+
+    def __init__(self,x,y,team):
+        self.x = x
+        self.y = y
+        self.team = team
     
-    
+    def drawNpc(self):
+        # Head
+        pygame.draw.ellipse(screen, color, [1 + x, y, 10, 10], 0)
+
+    # Legs
+        pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [10 + x, 27 + y], 2)
+        pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [x, 27 + y], 2)
+
+    # Body
+        pygame.draw.line(screen, RED, [5 + x, 17 + y], [5 + x, 7 + y], 2)
+
+    # Arms
+        pygame.draw.line(screen, RED, [5 + x, 7 + y], [9 + x, 17 + y], 2)
+        pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
+
+
+    def updateNpc(self):
+        if self.direction == 0:
+            self.y = self.y - self.speed
+        if self.direction == 1:
+            self.x = self.x + self.speed
+        if self.direction == 2:
+            self.y = self.y + self.speed
+        if self.direction == 3:
+            self.x = self.x - self.speed
+
+
+def fireBullet(x,y,direction,team):
+    fire = bullet(x,y,direction,team)
+    bulletList.append(fire)
+
+
 def fireUp(x,y):                       #firing upwards function (could just have a general firing function too)
     bulletList.append(bullet(x,y,0))
 def fireRight(x,y):                       #firing upwards function (could just have a general firing function too)
@@ -69,9 +161,6 @@ def fireLeft(x,y):                       #firing upwards function (could just ha
     bulletList.append(bullet(x,y,3))
 
 
-
-size = [2000, 1000]    
-screen = pygame.display.set_mode(size)   
 if __name__ == "__main__":    
     # Setup
     pygame.init()
@@ -118,13 +207,13 @@ if __name__ == "__main__":
                 elif event.key == pygame.K_DOWN:
                     y_speed = 3
                 elif event.key == pygame.K_w:
-                    fireUp(x_coord,y_coord)
+                    fireBullet(x_coord,y_coord,0,0)
                 elif event.key == pygame.K_d:
-                    fireRight(x_coord,y_coord)
+                    fireBullet(x_coord,y_coord,1,0)
                 elif event.key == pygame.K_a:
-                    fireLeft(x_coord,y_coord)
+                    fireBullet(x_coord,y_coord,3,0)
                 elif event.key == pygame.K_s:
-                    fireDown(x_coord,y_coord)                    
+                    fireBullet(x_coord,y_coord,2,0)                    
                     
             # User let up on a key
             elif event.type == pygame.KEYUP:
@@ -147,11 +236,16 @@ if __name__ == "__main__":
         screen.fill(WHITE)
      
         draw_stick_figure(screen, x_coord, y_coord)
-        for i in range(len(bulletList)):
+        for i, b in reversed(list(enumerate(bulletList))):              #go backwards so it doesnt break when you destroy an element in the middle of going through the list
             bulletList[i].updateBullet()
             bulletList[i].drawBullet()
-            
-     
+            if not bulletList[i].checkInBounds():
+                bulletList.pop(i)
+
+        for i, n in reversed(list(enumerate(npcList))):
+            npcList[i].updateNpc()
+            npcList[i].drawNpc()
+
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
      
