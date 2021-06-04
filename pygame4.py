@@ -14,12 +14,18 @@ TODO:
     spawn npcs at bases
     allow bases to change teams
 
+    get bullet collision
+    get team colors
+    limit number of bullets or time betwen shots
+
 @author: iviti
 """
 
 import pygame
 import time
 import random
+import math
+
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -29,9 +35,12 @@ RED = (255, 0, 0)
 BLUE = (0,0,255) 
 YELLOW = (128,128,0)
 
-bulletList = []                                     #list of bullets
-npcList = []                                        #list of npcs
- 
+#bulletList = []                                     #list of bullets
+#npcList = []                                        #list of npcs
+nNpcs = 2                                   #number of npcs
+reloadTime = 4                              #time betwen shots
+bulletRange = 15                             #distance at which bullet hits someone
+
 screenSize = [1000, 700]
 screen = pygame.display.set_mode(screenSize)
 
@@ -109,17 +118,19 @@ class bullet:                       #bullet class
 class npc:
     x = 0
     y = 0
-    team = 0
+    team = 1
     qstateMatrix = []
     color = YELLOW                          #just one color for now until we generalize teams
     speed = 2
     direction = 0
-
-    def __init__(self,x,y,team):
+    npcAI = "nothing"
+    timeOfLastShot = 0                   #how long its been since it fired
+    
+    def __init__(self,x,y,team,npcAI):
         self.x = x
         self.y = y
         self.team = team
-    
+        self.npcAI = npcAI
     def drawNpc(self):
         # Head
         pygame.draw.ellipse(screen, self.color, [1 + self.x, self.y, 10, 10], 0)
@@ -149,9 +160,24 @@ class npc:
     def randomDirection(self):
         self.direction = random.randint(0,3)
 
+    def npcShoot(self,shootDirection):
+        bulletList.append(bullet(self.x,self.y,shootDirection,self.team))
 
-def spawnNpc():
-    npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),1 ))
+    def checkCollision(self):
+        for i in range(len(bulletList)):
+            if bulletList[i].team != self.team:
+                deltaX = self.x - bulletList[i].x
+                deltaY = self.y - bulletList[i].y
+                r = math.sqrt(deltaX*deltaX + deltaY*deltaY)
+                
+                if r < bulletRange:
+                    return True
+                else:
+                    return False
+
+
+def spawnNpc(team,npcAI):
+    npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team,npcAI ))
 
 def fireBullet(x,y,direction,team):
     fire = bullet(x,y,direction,team)
@@ -171,7 +197,10 @@ def fireLeft(x,y):                       #firing upwards function (could just ha
 if __name__ == "__main__":    
     # Setup
     pygame.init()
-     
+    global bulletList
+    global npcList
+    bulletList = []                                     #list of bullets
+    npcList = []      
     # Set the width and height of the screen [width,height]
 
      
@@ -193,7 +222,8 @@ if __name__ == "__main__":
     # Current position
     x_coord = 10
     y_coord = 10
-    spawnNpc()
+    for i in range(nNpcs):
+        spawnNpc(1,"rando")
     # -------- Main Program Loop -----------
     while not done:
         # --- Event Processing
@@ -252,7 +282,14 @@ if __name__ == "__main__":
         for i, n in reversed(list(enumerate(npcList))):
             npcList[i].updateNpc()
             npcList[i].drawNpc()
-            npcList[i].randomDirection()
+            if npcList[i].npcAI == "rando":
+                npcList[i].randomDirection()
+                if time.time() - npcList[i].timeOfLastShot > reloadTime:
+                    npcList[i].npcShoot(random.randint(0,3))
+                    npcList[i].timeOfLastShot = time.time()
+                if npcList[i].checkCollision():
+                    npcList.pop(i) 
+                    
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
      
