@@ -19,7 +19,8 @@ TODO:
 
 import pygame
 import time
- 
+import random
+
 # Define some colors
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -121,30 +122,36 @@ class npc:
     
     def drawNpc(self):
         # Head
-        pygame.draw.ellipse(screen, color, [1 + x, y, 10, 10], 0)
+        pygame.draw.ellipse(screen, self.color, [1 + self.x, self.y, 10, 10], 0)
 
     # Legs
-        pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [10 + x, 27 + y], 2)
-        pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [x, 27 + y], 2)
+        pygame.draw.line(screen, BLACK, [5 + self.x, 17 + self.y], [10 + self.x, 27 + self.y], 2)
+        pygame.draw.line(screen, BLACK, [5 + self.x, 17 + self.y], [self.x, 27 + self.y], 2)
 
     # Body
-        pygame.draw.line(screen, RED, [5 + x, 17 + y], [5 + x, 7 + y], 2)
+        pygame.draw.line(screen, RED, [5 + self.x, 17 + self.y], [5 + self.x, 7 + self.y], 2)
 
     # Arms
-        pygame.draw.line(screen, RED, [5 + x, 7 + y], [9 + x, 17 + y], 2)
-        pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
+        pygame.draw.line(screen, RED, [5 + self.x, 7 + self.y], [9 + self.x, 17 + self.y], 2)
+        pygame.draw.line(screen, RED, [5 + self.x, 7 + self.y], [1 + self.x, 17 + self.y], 2)
 
 
     def updateNpc(self):
         if self.direction == 0:
-            self.y = self.y - self.speed
+            self.y = (self.y - self.speed)%screenSize[1]
         if self.direction == 1:
-            self.x = self.x + self.speed
+            self.x = (self.x + self.speed)%screenSize[0]
         if self.direction == 2:
-            self.y = self.y + self.speed
+            self.y = (self.y + self.speed)%screenSize[1]
         if self.direction == 3:
-            self.x = self.x - self.speed
+            self.x = (self.x - self.speed)%screenSize[0]
 
+    def randomDirection(self):
+        self.direction = random.randint(0,3)
+
+
+def spawnNpc():
+    npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),1 ))
 
 def fireBullet(x,y,direction,team):
     fire = bullet(x,y,direction,team)
@@ -186,7 +193,7 @@ if __name__ == "__main__":
     # Current position
     x_coord = 10
     y_coord = 10
-     
+    spawnNpc()
     # -------- Main Program Loop -----------
     while not done:
         # --- Event Processing
@@ -245,7 +252,7 @@ if __name__ == "__main__":
         for i, n in reversed(list(enumerate(npcList))):
             npcList[i].updateNpc()
             npcList[i].drawNpc()
-
+            npcList[i].randomDirection()
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
      
