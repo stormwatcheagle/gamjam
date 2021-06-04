@@ -5,21 +5,17 @@ TODO:
     fill out npc class
     give team traits (offense,defense,flakyness)
     create npc ai (micro and macro)
-
     create npc spawn point and spawn rate
     
     player respawn?
     give player ability to die when shot
-
     create bases
     spawn npcs at bases
     allow bases to change teams
     create win condition when one team has all bases
-
     correspond color to team
     give npcs colors
     give bullets colors
-
 @author: iviti
 """
 
@@ -115,8 +111,15 @@ class bullet:                       #bullet class
         if self.y < 0 :
             inBounds = 0
         return inBounds
-
-
+    def checkPlayerKill(self,x_player,y_player):
+        if self.team != 0:
+            deltaX = self.x - x_player                              #should just make a separate function for finding euclidean distance
+            deltaY = self.y - y_player
+            r = math.sqrt(deltaX*deltaX + deltaY*deltaY)                            
+            if r < bulletRange:
+                return True
+            else:
+                return False
 class npc:
     x = 0
     y = 0
@@ -278,6 +281,9 @@ if __name__ == "__main__":
         for i, b in reversed(list(enumerate(bulletList))):              #go backwards so it doesnt break when you destroy an element in the middle of going through the list
             bulletList[i].updateBullet()
             bulletList[i].drawBullet()
+            if bulletList[i].checkPlayerKill(x_coord,y_coord):
+                print("player shot")
+ #               pygame.quit()                                  #leave quit out until we get a gentler way of exiting
             if not bulletList[i].checkInBounds():
                 bulletList.pop(i)
 
