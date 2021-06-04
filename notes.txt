@@ -1,21 +1,10 @@
-political top down shooter
-walk around, gather followers, talk to other groups, build base, 
-
-civilians walk around randomly
-
-if they walk into one of your centers, they join you. 
-
-you take over a center by fighting off the other people there
-parlay mode, cant get shot, ask for or break alliance
-
-make or break alliances whenever you want
-
-civilian walk around randomly
-
-if they randomly walk into your capital, then they join you
-
-you have to be careful about randomly shooting them
+ai top down shooter
 
 
-the genetic algorithm will have at least 3 traits:
-likeliness of going for offense, likelihood of going for defense, and likeliness of switching (how often it decides to make the decision) 
+you take over a center by touching it
+
+
+use Q-state to govern large scale strategy like when to go aggressive/defensive, based on questions like enemy numbers and distributions
+
+use genetic algorithm to govern microscale like at what range to fire at enemy, when/how to dodge bullets
+
