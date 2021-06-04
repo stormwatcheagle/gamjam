@@ -23,7 +23,7 @@ import pygame
 import time
 import random
 import math
-
+from npc_h import *
 
 # Define some colors
 BLACK = (0, 0, 0)
@@ -58,145 +58,8 @@ def draw_stick_figure(screen, x, y):
     pygame.draw.line(screen, RED, [5 + x, 7 + y], [9 + x, 17 + y], 2)
     pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
 
-def drawNpc(screen,x,y,color):
-    # Head
-    pygame.draw.ellipse(screen, color, [1 + x, y, 10, 10], 0)
-
-    # Legs
-    pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [10 + x, 27 + y], 2)
-    pygame.draw.line(screen, BLACK, [5 + x, 17 + y], [x, 27 + y], 2)
-
-    # Body
-    pygame.draw.line(screen, RED, [5 + x, 17 + y], [5 + x, 7 + y], 2)
-
-    # Arms
-    pygame.draw.line(screen, RED, [5 + x, 7 + y], [9 + x, 17 + y], 2)
-    pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
 
 
-class bullet:                       #bullet class
-    direction = 0
-    x = 0
-    y = 0
-    bSpeed = 6             #default bullet speed is 3
-    team = 0
-
-    def __init__(self, xPos,yPos,direction,team):
-        self.x = xPos    # instance variable unique to each instance
-        self.y = yPos    # instance variable unique to each instance
-        self.direction = direction
-        self.team = team
-
-    def updateBullet(self):
-        if self.direction == 0:
-            self.y = self.y - self.bSpeed
-        if self.direction == 1:
-            self.x = self.x + self.bSpeed
-        if self.direction == 2:
-            self.y = self.y + self.bSpeed
-        if self.direction == 3:
-            self.x = self.x - self.bSpeed
-
-    def drawBullet(self):
-         pygame.draw.ellipse(screen, BLUE, [self.x,self.y, 5, 5], 0)
-
-    def checkInBounds(self):
-        inBounds = 1
-        if self.x > screenSize[0]:
-            inBounds = 0
-        if self.y > screenSize[1]:
-            inBounds = 0
-        if self.x < 0:
-            inBounds = 0
-        if self.y < 0 :
-            inBounds = 0
-        return inBounds
-    def checkPlayerKill(self,x_player,y_player):
-        if self.team != 0:
-            deltaX = self.x - x_player                              #should just make a separate function for finding euclidean distance
-            deltaY = self.y - y_player
-            r = math.sqrt(deltaX*deltaX + deltaY*deltaY)                            
-            if r < bulletRange:
-                return True
-            else:
-                return False
-class npc:
-    x = 0
-    y = 0
-    team = 1
-    qstateMatrix = []
-    color = YELLOW                          #just one color for now until we generalize teams
-    speed = 2
-    direction = 0
-    npcAI = "nothing"
-    timeOfLastShot = 0                   #how long its been since it fired
-    
-    def __init__(self,x,y,team,npcAI):
-        self.x = x
-        self.y = y
-        self.team = team
-        self.npcAI = npcAI
-    def drawNpc(self):
-        # Head
-        pygame.draw.ellipse(screen, self.color, [1 + self.x, self.y, 10, 10], 0)
-
-    # Legs
-        pygame.draw.line(screen, BLACK, [5 + self.x, 17 + self.y], [10 + self.x, 27 + self.y], 2)
-        pygame.draw.line(screen, BLACK, [5 + self.x, 17 + self.y], [self.x, 27 + self.y], 2)
-
-    # Body
-        pygame.draw.line(screen, RED, [5 + self.x, 17 + self.y], [5 + self.x, 7 + self.y], 2)
-
-    # Arms
-        pygame.draw.line(screen, RED, [5 + self.x, 7 + self.y], [9 + self.x, 17 + self.y], 2)
-        pygame.draw.line(screen, RED, [5 + self.x, 7 + self.y], [1 + self.x, 17 + self.y], 2)
-
-
-    def updateNpc(self):
-        if self.direction == 0:
-            self.y = (self.y - self.speed)%screenSize[1]
-        if self.direction == 1:
-            self.x = (self.x + self.speed)%screenSize[0]
-        if self.direction == 2:
-            self.y = (self.y + self.speed)%screenSize[1]
-        if self.direction == 3:
-            self.x = (self.x - self.speed)%screenSize[0]
-
-    def randomDirection(self):
-        self.direction = random.randint(0,3)
-
-    def npcShoot(self,shootDirection):
-        bulletList.append(bullet(self.x,self.y,shootDirection,self.team))
-
-    def checkCollision(self):
-        for i in range(len(bulletList)):
-            if bulletList[i].team != self.team:
-                deltaX = self.x - bulletList[i].x
-                deltaY = self.y - bulletList[i].y
-                r = math.sqrt(deltaX*deltaX + deltaY*deltaY)
-                
-                if r < bulletRange:
-                    return True
-                else:
-                    return False
-
-
-def spawnNpc(team,npcAI):
-    npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team,npcAI ))
-
-def fireBullet(x,y,direction,team):
-    fire = bullet(x,y,direction,team)
-    bulletList.append(fire)
-
-
-def fireUp(x,y):                       #firing upwards function (could just have a general firing function too)
-    bulletList.append(bullet(x,y,0))
-def fireRight(x,y):                       #firing upwards function (could just have a general firing function too)
-    bulletList.append(bullet(x,y,1))
-def fireDown(x,y):                       #firing upwards function (could just have a general firing function too)
-    bulletList.append(bullet(x,y,2))
-def fireLeft(x,y):                       #firing upwards function (could just have a general firing function too)
-    bulletList.append(bullet(x,y,3))
 
 
 if __name__ == "__main__":    
