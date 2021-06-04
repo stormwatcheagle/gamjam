@@ -4,19 +4,21 @@ Created on Mon May 31 13:58:19 2021
 TODO:
     fill out npc class
     give team traits (offense,defense,flakyness)
+    create npc ai (micro and macro)
 
-    make bullets kill
-    npc spawn
+    create npc spawn point and spawn rate
     
-    player respawn
+    player respawn?
+    give player ability to die when shot
 
     create bases
     spawn npcs at bases
     allow bases to change teams
+    create win condition when one team has all bases
 
-    get bullet collision
-    get team colors
-    limit number of bullets or time betwen shots
+    correspond color to team
+    give npcs colors
+    give bullets colors
 
 @author: iviti
 """
