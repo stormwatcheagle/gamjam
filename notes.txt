@@ -4,7 +4,11 @@ ai top down shooter
 you take over a center by touching it
 
 
-use Q-state to govern large scale strategy like when to go aggressive/defensive, based on questions like enemy numbers and distributions
+a small neural network to govern large scale strategy like when to go aggressive/defensive, based on questions like enemy numbers and distributions
+so the system creates a matrix that has number of players near our bases in one dimension, ratio of our bases to their bases, ratio of our teammates vs their team mates
+the value at each matrix cell indicating defense vs offense. The idea being that optimal strategy may matter on the situation but also on the history
 
-use genetic algorithm to govern microscale like at what range to fire at enemy, when/how to dodge bullets
+
+
+use genetic algorithm to govern microscale like at what range to fire at enemy
 
