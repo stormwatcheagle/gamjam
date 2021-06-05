@@ -12,3 +12,6 @@ the value at each matrix cell indicating defense vs offense. The idea being that
 
 use genetic algorithm to govern microscale like at what range to fire at enemy
 
+
+
+if there is a useful place for advanced AI it would be in coordinating the individual npc's
