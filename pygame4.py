@@ -11,11 +11,12 @@ TODO:
     give player ability to die when shot
     create bases
     spawn npcs at bases
-    allow bases to change teams
+    allow bases to change teams (almost done)
     create win condition when one team has all bases
     correspond color to team
     give npcs colors
     give bullets colors
+    player reload time
 @author: iviti
 """
 
@@ -42,6 +43,8 @@ from constants_h import *
 def spawnNpc(team,npcAI):
     npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team,npcAI ))
  
+def spawnBase(team):
+    baseList.append(flagBase(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team))
  
 def draw_stick_figure(screen, x, y):
     # Head
@@ -65,10 +68,12 @@ def draw_stick_figure(screen, x, y):
 if __name__ == "__main__":    
     # Setup
     pygame.init()
-    global bulletList
+    global bulletList                                                   #may not be necessary to global these anymore
     global npcList
+    global baseList
     bulletList = []                                     #list of bullets
-    npcList = []      
+    npcList = []   
+    baseList = []
     # Set the width and height of the screen [width,height]
 
      
@@ -92,6 +97,7 @@ if __name__ == "__main__":
     y_coord = 10
     for i in range(nNpcs):
         spawnNpc(1,"rando")
+        spawnBase(i)
     # -------- Main Program Loop -----------
     while not done:
         # --- Event Processing
@@ -160,7 +166,10 @@ if __name__ == "__main__":
                     npcList[i].timeOfLastShot = time.time()
                 if npcList[i].checkCollision(bulletList):
                     npcList.pop(i) 
-                    
+         
+        for i, f in reversed(list(enumerate(baseList))):
+            baseList[i].updateTeam(npcList)
+            baseList[i].drawBase()
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
      
