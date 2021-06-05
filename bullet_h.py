@@ -10,6 +10,8 @@ import time
 import random
 import math
 from constants_h import *
+from utilities_h import *
+
 
 class bullet:                       #bullet class
     direction = 0
@@ -17,13 +19,14 @@ class bullet:                       #bullet class
     y = 0
     bSpeed = 6             #default bullet speed is 3
     team = 0
-
+    color = BLUE
     def __init__(self, xPos,yPos,direction,team):
         self.x = xPos    # instance variable unique to each instance
         self.y = yPos    # instance variable unique to each instance
         self.direction = direction
         self.team = team
-
+        self.color = teamToColor(team)
+        
     def updateBullet(self):
         if self.direction == 0:
             self.y = self.y - self.bSpeed
@@ -35,7 +38,7 @@ class bullet:                       #bullet class
             self.x = self.x - self.bSpeed
 
     def drawBullet(self):
-         pygame.draw.ellipse(screen, BLUE, [self.x,self.y, 5, 5], 0)
+         pygame.draw.ellipse(screen, self.color, [self.x,self.y, 5, 5], 0)
 
     def checkInBounds(self):
         inBounds = 1
