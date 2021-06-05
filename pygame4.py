@@ -40,11 +40,11 @@ from constants_h import *
 
 
    
-def spawnNpc(team,npcAI):
-    npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team,npcAI ))
+def spawnNpc(team,npcAI,x,y):
+    npcList.append(npc(x,y,team,npcAI ))
  
 def spawnBase(team):
-    baseList.append(flagBase(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team))
+    baseList.append(flagBase(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team%nTeams))
  
 def draw_stick_figure(screen, x, y):
     # Head
@@ -58,8 +58,8 @@ def draw_stick_figure(screen, x, y):
     pygame.draw.line(screen, RED, [5 + x, 17 + y], [5 + x, 7 + y], 2)
  
     # Arms
-    pygame.draw.line(screen, RED, [5 + x, 7 + y], [9 + x, 17 + y], 2)
-    pygame.draw.line(screen, RED, [5 + x, 7 + y], [1 + x, 17 + y], 2)
+    pygame.draw.line(screen, RED, [5 + x, 13 + y], [13 + x,  y - 7], 2)
+    pygame.draw.line(screen, RED, [5 + x, 13 + y], [ x - 3,  y - 7], 2)
 
 
 
@@ -74,6 +74,7 @@ if __name__ == "__main__":
     bulletList = []                                     #list of bullets
     npcList = []   
     baseList = []
+    playerDeathToggle = 0
     # Set the width and height of the screen [width,height]
 
      
@@ -96,7 +97,8 @@ if __name__ == "__main__":
     x_coord = 10
     y_coord = 10
     for i in range(nNpcs):
-        spawnNpc(1,"rando")
+        spawnNpc(1,"rando",random.randint(0,screenSize[0]),random.randint(0,screenSize[1]))
+    for i in range(nBases):
         spawnBase(i)
     # -------- Main Program Loop -----------
     while not done:
@@ -152,10 +154,19 @@ if __name__ == "__main__":
             bulletList[i].drawBullet()
             if bulletList[i].checkPlayerKill(x_coord,y_coord):
                 print("player shot")
+                playerDeathTimer = time.time()
+                playerDeathToggle = 1
+                x_coord = -99999
+                y_coord = -99999
  #               pygame.quit()                                  #leave quit out until we get a gentler way of exiting
             if not bulletList[i].checkInBounds():
                 bulletList.pop(i)
-           
+        if playerDeathToggle == 1:
+            if time.time() - playerDeathTimer > playerSpawnRate:
+                playerDeathToggle = 0
+                x_coord = 100                            #player should really spawn at spawn site
+                y_coord = 100
+                
         for i, n in reversed(list(enumerate(npcList))):
             npcList[i].updateNpc()
             npcList[i].drawNpc()
@@ -168,8 +179,12 @@ if __name__ == "__main__":
                     npcList.pop(i) 
          
         for i, f in reversed(list(enumerate(baseList))):
-            baseList[i].updateTeam(npcList)
+            baseList[i].updateTeam(npcList,x_coord,y_coord)
             baseList[i].drawBase()
+            if time.time() - baseList[i].timeOfLastSpawn > spawnRate:
+                spawnNpc(baseList[i].team,"rando",baseList[i].x,baseList[i].y)
+                baseList[i].timeOfLastSpawn = time.time()
+#            baseList[i]
         # Go ahead and update the screen with what we've drawn.
         pygame.display.flip()
      
