@@ -4,6 +4,17 @@ Created on Fri Jun  4 15:06:15 2021
 npc header
 @author: iviti
 """
+
+import pygame
+import time
+import random
+import math
+from bullet_h import *
+# Define some colors
+from constants_h import *
+
+
+
 def drawNpc(screen,x,y,color):
     # Head
     pygame.draw.ellipse(screen, color, [1 + x, y, 10, 10], 0)
@@ -65,10 +76,10 @@ class npc:
     def randomDirection(self):
         self.direction = random.randint(0,3)
 
-    def npcShoot(self,shootDirection):
+    def npcShoot(self,shootDirection,bulletList):
         bulletList.append(bullet(self.x,self.y,shootDirection,self.team))
 
-    def checkCollision(self):
+    def checkCollision(self,bulletList):
         for i in range(len(bulletList)):
             if bulletList[i].team != self.team:
                 deltaX = self.x - bulletList[i].x
@@ -80,6 +91,3 @@ class npc:
                 else:
                     return False
 
-
-def spawnNpc(team,npcAI):
-    npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team,npcAI ))
