@@ -24,24 +24,24 @@ import time
 import random
 import math
 from npc_h import *
+from bullet_h import *
+from flagBase_h import *
+from constants_h import *
 
-# Define some colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
-GREEN = (0, 255, 0)
-RED = (255, 0, 0)
-BLUE = (0,0,255) 
-YELLOW = (128,128,0)
+
+
 
 #bulletList = []                                     #list of bullets
 #npcList = []                                        #list of npcs
-nNpcs = 2                                   #number of npcs
-reloadTime = 4                              #time betwen shots
-bulletRange = 15                             #distance at which bullet hits someone
 
-screenSize = [1000, 700]
-screen = pygame.display.set_mode(screenSize)
 
+
+
+
+   
+def spawnNpc(team,npcAI):
+    npcList.append(npc(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team,npcAI ))
+ 
  
 def draw_stick_figure(screen, x, y):
     # Head
@@ -112,13 +112,13 @@ if __name__ == "__main__":
                 elif event.key == pygame.K_DOWN:
                     y_speed = 3
                 elif event.key == pygame.K_w:
-                    fireBullet(x_coord,y_coord,0,0)
+                    fireBullet(x_coord,y_coord,0,0,bulletList)
                 elif event.key == pygame.K_d:
-                    fireBullet(x_coord,y_coord,1,0)
+                    fireBullet(x_coord,y_coord,1,0,bulletList)
                 elif event.key == pygame.K_a:
-                    fireBullet(x_coord,y_coord,3,0)
+                    fireBullet(x_coord,y_coord,3,0,bulletList)
                 elif event.key == pygame.K_s:
-                    fireBullet(x_coord,y_coord,2,0)                    
+                    fireBullet(x_coord,y_coord,2,0,bulletList)                    
                     
             # User let up on a key
             elif event.type == pygame.KEYUP:
@@ -149,16 +149,16 @@ if __name__ == "__main__":
  #               pygame.quit()                                  #leave quit out until we get a gentler way of exiting
             if not bulletList[i].checkInBounds():
                 bulletList.pop(i)
-
+           
         for i, n in reversed(list(enumerate(npcList))):
             npcList[i].updateNpc()
             npcList[i].drawNpc()
             if npcList[i].npcAI == "rando":
                 npcList[i].randomDirection()
                 if time.time() - npcList[i].timeOfLastShot > reloadTime:
-                    npcList[i].npcShoot(random.randint(0,3))
+                    npcList[i].npcShoot(random.randint(0,3),bulletList)
                     npcList[i].timeOfLastShot = time.time()
-                if npcList[i].checkCollision():
+                if npcList[i].checkCollision(bulletList):
                     npcList.pop(i) 
                     
         # Go ahead and update the screen with what we've drawn.
