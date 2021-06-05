@@ -4,6 +4,13 @@ Created on Fri Jun  4 15:09:47 2021
 
 @author: iviti
 """
+
+import pygame
+import time
+import random
+import math
+from constants_h import *
+
 class bullet:                       #bullet class
     direction = 0
     x = 0
@@ -51,7 +58,7 @@ class bullet:                       #bullet class
             else:
                 return False
 
-def fireBullet(x,y,direction,team):
+def fireBullet(x,y,direction,team,bulletList):
     fire = bullet(x,y,direction,team)
     bulletList.append(fire)
 
