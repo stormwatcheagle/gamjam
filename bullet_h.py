@@ -53,8 +53,8 @@ class bullet:                       #bullet class
         return inBounds
     def checkPlayerKill(self,x_player,y_player):
         if self.team != 0:
-            deltaX = self.x - x_player                              #should just make a separate function for finding euclidean distance
-            deltaY = self.y - y_player
+            deltaX = self.x - (x_player + 5)                              #should just make a separate function for finding euclidean distance
+            deltaY = self.y - (y_player + 5)
             r = math.sqrt(deltaX*deltaX + deltaY*deltaY)                            
             if r < bulletRange:
                 return True
