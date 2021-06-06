@@ -38,7 +38,7 @@ def spawnNpc(team,npcAI,x,y):
     npcList.append(npc(x,y,team,npcAI ))
  
 def spawnBase(team):
-    baseList.append(flagBase(random.randint(0,screenSize[0]),random.randint(0,screenSize[1]),team%nTeams))
+    baseList.append(flagBase(random.randint(50,screenSize[0]-50),random.randint(50,screenSize[1]-50),team%nTeams))
  
 def draw_stick_figure(screen, x, y):
     # Head
