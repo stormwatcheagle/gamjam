@@ -7,10 +7,19 @@ you take over a center by touching it
 a small neural network to govern large scale strategy like when to go aggressive/defensive, based on questions like enemy numbers and distributions
 so the system creates a matrix that has number of players near our bases in one dimension, ratio of our bases to their bases, ratio of our teammates vs their team mates
 the value at each matrix cell indicating defense vs offense. The idea being that optimal strategy may matter on the situation but also on the history
+macro might also have to decide which cells to go for, closest, farthest, pick a corner, etc.
 
 
 
-use genetic algorithm to govern microscale like at what range to fire at enemy
+So the bulk of the microscale decisions will be hardcoded (aim at enemies before shooting, dodge bullets, travel to waypoint). What will have a slider on it will be when to do these things:
+like at what range to fire(longer range has higher chance of missing, closer range has higher chance of dying first),
+how far in advance to juke (long range gets it out of the way and lets you plan ahead, short range means less un necessary juking),
+and how to travel to 
+
+more decisions/sliders can be added later. These sliders will be the npc's "genome" which gets mutated and combined. of course this means I also need a points system
++5 points for taking a flag
++1 point  for shooting someone
+-5 points for dying
 
 
 
