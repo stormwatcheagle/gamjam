@@ -26,15 +26,15 @@ class bullet:                       #bullet class
         self.direction = direction
         self.team = team
         self.color = teamToColor(team)
-        
+
     def updateBullet(self):
-        if self.direction == 0:
+        if self.direction == DOWN:
             self.y = self.y - self.bSpeed
-        if self.direction == 1:
+        if self.direction == RIGHT:
             self.x = self.x + self.bSpeed
-        if self.direction == 2:
+        if self.direction == UP:
             self.y = self.y + self.bSpeed
-        if self.direction == 3:
+        if self.direction == LEFT:
             self.x = self.x - self.bSpeed
 
     def drawBullet(self):
@@ -55,7 +55,7 @@ class bullet:                       #bullet class
         if self.team != 0:
             deltaX = self.x - (x_player + 5)                              #should just make a separate function for finding euclidean distance
             deltaY = self.y - (y_player + 5)
-            r = math.sqrt(deltaX*deltaX + deltaY*deltaY)                            
+            r = math.sqrt(deltaX*deltaX + deltaY*deltaY)
             if r < bulletRange:
                 return True
             else:
