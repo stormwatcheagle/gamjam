@@ -14,7 +14,7 @@ macro might also have to decide which cells to go for, closest, farthest, pick a
 So the bulk of the microscale decisions will be hardcoded (aim at enemies before shooting, dodge bullets, travel to waypoint). What will have a slider on it will be when to do these things:
 like at what range to fire(longer range has higher chance of missing, closer range has higher chance of dying first),
 how far in advance to juke (long range gets it out of the way and lets you plan ahead, short range means less un necessary juking),
-and how to travel to 
+and how afraid to be of groups of enemies(stay away from everyone all the time, or get close to them to take their flag)
 
 more decisions/sliders can be added later. These sliders will be the npc's "genome" which gets mutated and combined. of course this means I also need a points system
 +5 points for taking a flag
