@@ -13,7 +13,7 @@ import math
 
 reloadTime = 4                              #time betwen shots
 spawnRate = 30
-bulletRange = 50                            #distance at which bullet hits someone
+bulletRange = 15                            #distance at which bullet hits someone
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
@@ -23,8 +23,9 @@ YELLOW = (128,128,0)
 GREY = (100,100,100)
 screenSize = [1000, 700]
 screen = pygame.display.set_mode(screenSize)
-nNpcs = 2                                   #number of npcs
+nNpcs = 1                                   #number of npcs
 baseRange = 50
 nTeams = 2                          #number of npc teams + 1 (player)
-nBases = 6
+nBases = 2
 playerSpawnRate = 5
+playerReloadTime = 2
